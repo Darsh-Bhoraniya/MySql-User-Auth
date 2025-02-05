@@ -1,0 +1,16 @@
+import { Sequelize } from "sequelize";
+import config from "./db.js";
+
+const sequelize = new Sequelize(
+  config.mysql.database,
+  config.mysql.username,
+  config.mysql.password,
+  {
+    host: config.mysql.host,
+    dialect: "mysql",
+    port: config.mysql.port,
+    logging: false,
+  }
+);
+
+export default sequelize;
