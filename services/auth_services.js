@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import auth_constant from "../constants/auth_const.js";
-=======
-import auth_constant from "../constant/auth_constant.js";
->>>>>>> c0e191b11c7948ed6b1fb8ae588933247fc1566b
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import { ApiError } from "../utils/response/api_error.js";

@@ -1,9 +1,5 @@
 import joi from "joi";
-<<<<<<< HEAD
 import auth_constant from "../../constants/auth_const.js";
-=======
-import auth_constant from "../../constant/auth_constant.js";
->>>>>>> c0e191b11c7948ed6b1fb8ae588933247fc1566b
 
 const adminRegisterSchema = {
   body: joi.object().keys({

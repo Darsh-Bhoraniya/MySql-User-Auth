@@ -1,21 +1,11 @@
-<<<<<<< HEAD
 import auth_constant from "../constants/auth_const.js";
-=======
-import auth_constant from "../constant/auth_constant.js";
->>>>>>> c0e191b11c7948ed6b1fb8ae588933247fc1566b
 import { ApiError } from "./response/api_error.js";
 import { response_objects } from "./response/response_messages.js";
 import jwt from "jsonwebtoken";
 import moment from "moment";
-<<<<<<< HEAD
 import user_token from '../models/user_token.js'
 import { where } from "sequelize";
 import User from "../models/User.js";
-=======
-import user_token from '../models/user_token .js'
-import { where } from "sequelize";
-import User from "../models/user.js";
->>>>>>> c0e191b11c7948ed6b1fb8ae588933247fc1566b
 
 const genrateauthToken = async (user) => {
   try {
@@ -104,14 +94,8 @@ const readToken = async (readToken, type) => {
       token: readToken,
       type: type,
     };
-<<<<<<< HEAD
     console.log(query);
     let get_token = await user_token.findOne({ where: query });
-=======
-
-    let get_token = await user_token.findOne({ where: query });
-
->>>>>>> c0e191b11c7948ed6b1fb8ae588933247fc1566b
     if (!get_token) {
       return {
         type: "Invalid_token",
