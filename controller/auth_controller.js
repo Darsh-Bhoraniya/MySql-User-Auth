@@ -20,7 +20,7 @@ const adminRegister = async (req, res) => {
 const adminLogin = async (req, res) => {
     let data_body = req.body;
 
-    const login_user = await auth_services.adminLoginFromDB(data_body);
+    const login_user = await auth_services.AdminLogin(data_body);
 
     if (login_user.data === null) {
         return Promise.reject({
@@ -31,6 +31,7 @@ const adminLogin = async (req, res) => {
     }
 
     const tokens = await genrateauthToken(login_user.data);
+    console.log(tokens);
     delete login_user.data.password;
 
     return {

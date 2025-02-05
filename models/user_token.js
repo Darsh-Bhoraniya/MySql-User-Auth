@@ -16,7 +16,7 @@ const UserToken = sequelize.define('UserToken', {
         allowNull: false,
         references: {
             model: 'users',
-            key: 'id',  // Make sure this references the correct 'users' table primary key
+            key: 'user_id',  // Make sure this references the correct 'users' table primary key
         },
         onDelete: 'CASCADE',
     },
