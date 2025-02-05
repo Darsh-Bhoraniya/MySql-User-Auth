@@ -14,6 +14,7 @@ router.post(
       const result = await adminRegister(req, next);
       return universalFunction.sendSuccess(res, result, next);
     } catch (e) {
+      console.log("feinfnn");
       return universalFunction.sendError(e, next);
     }
   }
