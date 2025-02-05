@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post(
   "/admin/register",
+  
   validate(adminRegisterSchema),
   async (req, res, next) => {
     try {
