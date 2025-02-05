@@ -35,6 +35,7 @@ const genrateauthToken = async (user) => {
       refresh_token_expires,
       auth_constant.TOKEN_TYPES.REFRESH
     );
+    console.log("");
     return {
       access_token: access_token,
       refresh_token: refresh_token,
@@ -94,8 +95,8 @@ const readToken = async (readToken, type) => {
       token: readToken,
       type: type,
     };
-    console.log(query);
     let get_token = await user_token.findOne({ where: query });
+    console.log(get_token);
     if (!get_token) {
       return {
         type: "Invalid_token",

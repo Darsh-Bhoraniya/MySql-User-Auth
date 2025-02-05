@@ -39,11 +39,9 @@ const AdminLogin = async (data_body) => {
     let { email, password, role_id } = data_body;
 
     let query = { email: email, role_id: role_id };
-
     let find_user = await User.findOne({
       where: query,
     });
-    
     if (!find_user) {
       return {
         data: null,
@@ -52,7 +50,7 @@ const AdminLogin = async (data_body) => {
         module_name: "User",
       };
     }
-
+    
     if (role_id != auth_constant.USER_TYPE.Admin) {
       return {
         data: null,
@@ -60,7 +58,7 @@ const AdminLogin = async (data_body) => {
         message_type: "message",
       };
     }
-
+    
     if (!find_user.password) {
       return {
         data: null,

@@ -12,8 +12,8 @@ const JWT = {
 };
 
 const TOKEN_TYPES = {
-    ACCESS: "access_token",
-    REFRESH: "refresh_token",
+    ACCESS: 1,
+    REFRESH: 2,
     FORGOT_PASSWORD: "forgot_password",
     SET_PASSWORD: "set_password",
     VERIFY_EMAIL: "verify_email",
