@@ -1,11 +1,11 @@
-import auth_constant from "../constant/auth_constant.js";
+import auth_constant from "../constants/auth_const.js";
 import { ApiError } from "./response/api_error.js";
 import { response_objects } from "./response/response_messages.js";
 import jwt from "jsonwebtoken";
 import moment from "moment";
-import user_token from '../models/user_token .js'
+import user_token from '../models/user_token.js'
 import { where } from "sequelize";
-import User from "../models/user.js";
+import User from "../models/User.js";
 
 const genrateauthToken = async (user) => {
   try {
@@ -94,9 +94,8 @@ const readToken = async (readToken, type) => {
       token: readToken,
       type: type,
     };
-
+    console.log(query);
     let get_token = await user_token.findOne({ where: query });
-
     if (!get_token) {
       return {
         type: "Invalid_token",

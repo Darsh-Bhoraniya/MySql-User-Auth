@@ -5,7 +5,7 @@ export default {
       password: "Darsh@123",
       host: "localhost",
       port: 3306,
-      database: "FullStack",
+      database: "backend_practice",
     },
   };
   
