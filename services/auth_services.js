@@ -1,4 +1,4 @@
-import auth_constant from "../constant/auth_constant.js";
+import auth_constant from "../constants/auth_const.js";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import { ApiError } from "../utils/response/api_error.js";

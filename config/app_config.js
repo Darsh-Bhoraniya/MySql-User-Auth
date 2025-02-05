@@ -12,5 +12,13 @@ const sequelize = new Sequelize(
     logging: false,
   }
 );
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("MySQL connected successfully");
+  })
+  .catch((err) => {
+    console.error("MySQL connection error:", err);
+  });
 
 export default sequelize;
