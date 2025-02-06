@@ -31,7 +31,7 @@ const adminLogin = async (req, res) => {
     }
 
     const tokens = await genrateauthToken(login_user.data);
-    console.log(tokens);
+
     delete login_user.data.password;
 
     return {

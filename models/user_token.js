@@ -40,7 +40,7 @@ export default (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'UserToken',
-      tableName: 'user_tokens', // Specify the table name
+      tableName: 'user_token',
       timestamps: true,
       createdAt: 'created_at',
       updatedAt: 'updated_at',

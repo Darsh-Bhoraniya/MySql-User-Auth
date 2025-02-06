@@ -3,17 +3,12 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import responseHandler from "./utils/response/response_handler.js";
-
-import {errorHandler} from "./utils/response/error_handler.js"; 
+import { errorHandler } from "./utils/response/error_handler.js";
 import routes from "./routes/index.js";
 
 dotenv.config();
 
 const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 const corsOptions = { origin: process.env.ALLOW_ORIGIN };
 app.use(cors(corsOptions));
@@ -27,9 +22,11 @@ app.use(
     })
 );
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(routes);
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
-    console.log(`your application is running on ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000; // Ensure fallback port
+app.listen(PORT, () => {
+    console.log(`Your application is running on port ${PORT}`);
 });
