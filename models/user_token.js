@@ -1,45 +1,50 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/app_config.js';
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
+  class UserToken extends Model {
+    static associate(models) {
+      UserToken.belongsTo(models.User, {
+        foreignKey: 'user_id',
+        as: 'user',
+      });
+    }
+  }
 
-const UserToken = sequelize.define('UserToken', {
-    token_id: {
+  UserToken.init(
+    {
+      token_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,  // Automatically incrementing the token_id
-    },
-    token: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    user_id: {
+        autoIncrement: true,
+      },
+      user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'users',
-            key: 'user_id',  // Make sure this references the correct 'users' table primary key
+          model: 'users', // Ensure the correct table name is referenced
+          key: 'user_id', // Reference the 'user_id' column in the 'users' table
         },
-        onDelete: 'CASCADE',
-    },
-    token_expiry: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    type: {
+      },
+      token: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-    created_at: {
+      },
+      token_expiry: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        allowNull: false,
+      },
+      type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
-}, {
-    tableName: 'user_token',
-    timestamps: false,  // If you're manually handling 'created_at' and 'updated_at'
-});
-
-
-export default UserToken;
+    {
+      sequelize,
+      modelName: 'UserToken',
+      tableName: 'user_tokens', // Specify the table name
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    }
+  );
+  return UserToken;
+}

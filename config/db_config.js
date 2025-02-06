@@ -4,8 +4,8 @@ export default {
       username: "darsh",
       password: "Darsh@123",
       host: "localhost",
-      port: 3306,
       database: "backend_practice",
+      port: 3306,
     },
   };
   

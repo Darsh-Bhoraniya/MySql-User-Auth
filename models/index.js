@@ -1,37 +1,60 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+import fs from "fs";
+import path from "path";
+import { Sequelize, DataTypes } from "sequelize";
+import process from "process";
+import { fileURLToPath } from "url";
+import config from "../config/db_config.js";
+import app_config from "../config/app_config.js";
+// import logAction from "../middlewares/audit_logs.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// const config = db_config[env];
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
-
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
+const sequelize = new Sequelize(
+  config.mysql.database,
+  config.mysql.username,
+  config.mysql.password,
+  {
+    host: config.mysql.host,
+    dialect: 'mysql',
+    port: config.mysql.port,
+    logging: false,  // Optional: to turn off SQL logging in the console
+  }
+);
+const loadModels = async () => {
+  const files = fs.readdirSync(__dirname).filter((file) => {
     return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
+      file.indexOf(".") !== 0 &&
+      file !== path.basename(__filename) &&
+      !file.includes(".test")
     );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
   });
 
-Object.keys(db).forEach(modelName => {
+  const imports = files.map(async (file) => {
+    try {
+      const modelPath = path.join(__dirname, file);
+      const modelModule = await import(new URL(`file://${modelPath}`));
+      const model = modelModule.default ? modelModule.default(sequelize, DataTypes) : null;  
+      if (model) {
+        db[model.name] = model;
+      }
+  
+    } catch (error) {
+      console.error(`Error loading model from file: ${file}`, error);
+    }
+  });
+  
+
+  await Promise.all(imports);
+};
+
+await loadModels();
+
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
@@ -40,4 +63,4 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+export default db;

@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
-import config from "./db.js";
+import config from "./db_config.js";
+
 
 const sequelize = new Sequelize(
   config.mysql.database,
@@ -7,11 +8,12 @@ const sequelize = new Sequelize(
   config.mysql.password,
   {
     host: config.mysql.host,
-    dialect: "mysql",
+    dialect: 'mysql',
     port: config.mysql.port,
-    logging: false,
+    logging: false,  // Optional: to turn off SQL logging in the console
   }
 );
+
 sequelize
   .authenticate()
   .then(() => {
