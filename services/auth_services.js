@@ -1,8 +1,11 @@
 import auth_constant from "../constants/auth_const.js";
 import bcrypt from "bcrypt";
-import User from "../models/User.js";
+import Models from "../models/index.js";
 import { ApiError } from "../utils/response/api_error.js";
 import response_objects from "../utils/response/response_messages.js";
+import db_services from "../utils/db_services.js";
+import User from "../models/User.js";
+
 
 const adminRegisterInDB = async (data_to_create) => {
   try {
@@ -16,8 +19,8 @@ const adminRegisterInDB = async (data_to_create) => {
       password: hashedPassword,
       role_id: 1,
     };
-
-    const created_user = await User.create(query);
+    console.log("Models.User",Models.User);
+    const created_user = await db_services.createOne(Models.User,query)
 
     return {
       type: "REGISTRATION_SUCCESS",
@@ -50,7 +53,7 @@ const AdminLogin = async (data_body) => {
         module_name: "User",
       };
     }
-    
+
     if (role_id != auth_constant.USER_TYPE.Admin) {
       return {
         data: null,
@@ -58,7 +61,7 @@ const AdminLogin = async (data_body) => {
         message_type: "message",
       };
     }
-    
+
     if (!find_user.password) {
       return {
         data: null,
