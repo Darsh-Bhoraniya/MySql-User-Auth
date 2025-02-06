@@ -3,9 +3,8 @@ import { ApiError } from "./response/api_error.js";
 import { response_objects } from "./response/response_messages.js";
 import jwt from "jsonwebtoken";
 import moment from "moment";
-import user_token from '../models/user_token.js'
-import { where } from "sequelize";
-import User from "../models/User.js";
+import db_services from "./db_services.js";
+import Models from "../models/index.js";
 
 const genrateauthToken = async (user) => {
   try {
@@ -35,7 +34,6 @@ const genrateauthToken = async (user) => {
       refresh_token_expires,
       auth_constant.TOKEN_TYPES.REFRESH
     );
-    console.log("");
     return {
       access_token: access_token,
       refresh_token: refresh_token,
@@ -47,7 +45,6 @@ const genrateauthToken = async (user) => {
 };
 //Genrate token
 const generateToken = (user_details, expires, secrete) => {
-  // Generate token logic
   try {
     const user_id = user_details.user_id;
     let user_role = user_details.role_id;
@@ -79,8 +76,7 @@ const saveToken = (token, user, expires, type) => {
       token_expiry: expires ? expires.toDate() : new Date(),
       user_id: user_id,
     };
-    const create_token = user_token.create(body);
-
+    const create_token = db_services.createOne(Models.UserToken, body)
     return create_token;
   } catch (error) {
     throw new ApiError(500, response_objects[0].message);
@@ -95,8 +91,7 @@ const readToken = async (readToken, type) => {
       token: readToken,
       type: type,
     };
-    let get_token = await user_token.findOne({ where: query });
-    console.log(get_token);
+    let get_token = await db_services.findOne(Models.UserToken, query);
     if (!get_token) {
       return {
         type: "Invalid_token",
@@ -119,6 +114,7 @@ const readToken = async (readToken, type) => {
 const refreshAuth = async (refresh_token) => {
   try {
     const token = await readToken(refresh_token, auth_constant.TOKEN_TYPES.REFRESH);
+
     if (token.data === null) {
       return {
         data: null,
@@ -127,8 +123,9 @@ const refreshAuth = async (refresh_token) => {
         module_name: token.module_name
       }
     }
-    const user_id = token.data.sub;
-    const dbuser = await User.findOne({ where: { user_id: user_id } });
+    const id = token.data.sub;
+    const dbuser = await db_services.findOne(Models.User, { user_id: id });
+
     const access_token_expire = moment().add(
       auth_constant.JWT.ACCESS_EXPIRES_IN,
       "minutes"

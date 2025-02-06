@@ -4,7 +4,6 @@ import Models from "../models/index.js";
 import { ApiError } from "../utils/response/api_error.js";
 import response_objects from "../utils/response/response_messages.js";
 import db_services from "../utils/db_services.js";
-import User from "../models/User.js";
 
 
 const adminRegisterInDB = async (data_to_create) => {
@@ -19,7 +18,6 @@ const adminRegisterInDB = async (data_to_create) => {
       password: hashedPassword,
       role_id: 1,
     };
-    console.log("Models.User",Models.User);
     const created_user = await db_services.createOne(Models.User,query)
 
     return {
@@ -42,9 +40,8 @@ const AdminLogin = async (data_body) => {
     let { email, password, role_id } = data_body;
 
     let query = { email: email, role_id: role_id };
-    let find_user = await User.findOne({
-      where: query,
-    });
+    
+    let find_user = await db_services.findOne(Models.User, query);
     if (!find_user) {
       return {
         data: null,
