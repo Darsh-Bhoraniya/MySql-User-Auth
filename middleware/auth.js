@@ -1,8 +1,8 @@
 import passport from "passport";
 
 const verifyUser = (req, resolve, reject) => async (err, user, info) => {
-  console.log(info);
 
+  
   if (err || info || !user) {
     return reject("Unauthorized user");
   }
@@ -10,6 +10,7 @@ const verifyUser = (req, resolve, reject) => async (err, user, info) => {
   req.user = user;
   resolve();
 };
+
 
 export const Auth = () => async (req, res, next) => {
   try {
