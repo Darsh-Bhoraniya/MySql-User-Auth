@@ -5,7 +5,9 @@ import dotenv from "dotenv";
 import responseHandler from "./utils/response/response_handler.js";
 import { errorHandler } from "./utils/response/error_handler.js";
 import routes from "./routes/index.js";
-
+import sequelize from "./config/app_config.js";
+import { authenticateUser } from "./config/passport_strategy.js";
+import passport from "passport";
 dotenv.config();
 
 const app = express();
@@ -21,6 +23,7 @@ app.use(
         },
     })
 );
+authenticateUser(passport);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(routes);
