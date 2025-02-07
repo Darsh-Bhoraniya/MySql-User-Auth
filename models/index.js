@@ -3,10 +3,8 @@
 import fs from "fs";
 import path from "path";
 import { Sequelize, DataTypes } from "sequelize";
-import process from "process";
 import { fileURLToPath } from "url";
 import config from "../config/db_config.js";
-import app_config from "../config/app_config.js";
 // import logAction from "../middlewares/audit_logs.js";
 
 const __filename = fileURLToPath(import.meta.url);

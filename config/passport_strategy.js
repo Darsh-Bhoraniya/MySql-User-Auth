@@ -2,11 +2,11 @@ import { Strategy, ExtractJwt } from "passport-jwt";
 import passport from "passport";
 import Models from "../models/index.js";
 import db_services from "../utils/db_services.js";
-import config from "./app_config.js";
-
+import dotenv from "dotenv";
+dotenv.config();
 
 export const authenticateUser = (passport_obj) => {
-  const jwtSecret = config.JWT_SECRET;
+  const jwtSecret = process.env.JWT_SECRET
   const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: jwtSecret,
@@ -14,8 +14,7 @@ export const authenticateUser = (passport_obj) => {
 
   passport.use(
     "user_auth",
-    new Strategy(options, async (payload, done) => {
-      
+    new Strategy(options, async (payload, done) => {;
       try {
         const user = await db_services.findOne(Models.user, {
           id: payload.sub,
