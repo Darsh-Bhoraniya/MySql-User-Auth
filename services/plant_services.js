@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 import { ApiError } from "../utils/response/api_error.js";
 import { response_objects } from "../utils/response/response_messages.js";
 import Models from "../models/index.js";
+import db_services from "../utils/db_services.js";
 
 // Function to get the plant details from the database
 const getPlantsDetailsfromDB = async (req_query) => {
@@ -71,6 +72,35 @@ const getPlantsDetailsfromDB = async (req_query) => {
     }
 };
 
+
+const createPlantInDB = async (data_to_create) => {
+    try {
+        const name = data_to_create.name;
+        const find_plant = await db_services.findOne(Models.Plant, {
+            name:name
+        });
+        if (find_plant) {
+            return {
+                type: "ALLREADY_EXIST",
+                message_type: "message",
+                module_name: "Plant Name",
+                data: null,
+            }
+        }
+        const create_plant = await db_services.createOne(Models.Plant, data_to_create);
+        return {
+            data: create_plant,
+            type: "",
+            message_type: "",
+        };
+    } catch (error) {
+        console.log(error);
+        throw new ApiError(500, response_objects[0].message);
+    }
+}
+
+
 export default {
-    getPlantsDetailsfromDB
+    getPlantsDetailsfromDB,
+    createPlantInDB
 }
