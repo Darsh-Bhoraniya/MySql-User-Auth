@@ -1,8 +1,9 @@
-import { Op } from "sequelize";
-import { ApiError } from "../utils/response/api_error.js";
+import { Op, where } from "sequelize";
+import { ApiError, throwError } from "../utils/response/api_error.js";
 import { response_objects } from "../utils/response/response_messages.js";
 import Models from "../models/index.js";
 import db_services from "../utils/db_services.js";
+import ModelManager from "sequelize/lib/model-manager";
 
 // Function to get the plant details from the database
 const getPlantsDetailsfromDB = async (req_query) => {
@@ -77,7 +78,7 @@ const createPlantInDB = async (data_to_create) => {
     try {
         const name = data_to_create.name;
         const find_plant = await db_services.findOne(Models.Plant, {
-            name:name
+            name: name
         });
         if (find_plant) {
             return {
@@ -99,8 +100,93 @@ const createPlantInDB = async (data_to_create) => {
     }
 }
 
+const UpdatePlantInDB = async (data_update, plant_id) => {
+    try {
+        let query = { id: plant_id };
+
+        const findplant = await db_services.findOne(Models.Plant, query);
+        if (!findplant) {
+            return {
+                type: "NOT_FOUND",
+                message_type: "message",
+                module_name: "Plant",
+                data: null
+            };
+        }
+        if (data_update?.name) {
+            let query = {
+                name: data_update.name
+            }
+            const existingplant = await db_services.findOne(Models.Plant, query);
+
+
+            if (existingplant && existingplant.id !== plant_id) {
+                return {
+                    type: "ALLREADY_EXIST",
+                    message_type: "message",
+                    module_name: "Plant",
+                    data: null
+                };
+            }
+        }
+
+        // Update the plant
+        const updateplant = await Models.Plant.update(data_update, {
+            where: {
+                id: plant_id
+            },
+            individualHooks: true
+        })
+        console.log("updateplant", updateplant);
+        return {
+            type: "UPDATE_SUCCESS",
+            message_type: "message",
+            module_name: "Plant",
+            data: updateplant,
+        };
+    } catch (error) {
+        console.error(error);
+        throw new ApiError(500, response_objects[0].message)
+    }
+};
+
+const DeletePlantInDB = async (plant_id) => {
+    try {
+        let find_plant = await Models.Plant.findOne({
+            where: {
+                id: plant_id,
+                is_deleted: false
+            },
+        });
+
+        if (!find_plant) {
+            return {
+                type: "NOT_FOUND",
+                message_type: "message",
+                module_name: "Plant",
+                data: null,
+            };
+        }
+
+        await Models.Plant.update(
+            { is_deleted: true },
+            { where: { id: plant_id } }
+        );
+
+        return {
+            type: "DELETE_SUCCESS",
+            message_type: "message",
+            module_name: "Plant",
+        };
+    } catch (error) {
+        console.error(error);
+        throw new ApiError(500, "Something went wrong!");
+    }
+};
 
 export default {
     getPlantsDetailsfromDB,
-    createPlantInDB
+    createPlantInDB,
+    UpdatePlantInDB,
+    DeletePlantInDB
 }
