@@ -25,19 +25,20 @@ const getPlantDetailbyid = {
 
 const updatePlantSchema = {
     body: joi.object({
-        name: joi.string(),
-        scientific_name: joi.string(),
-        description: joi.string(),
-        plant_type: joi.string(),
-        sunlight_requirement: joi.string(),
-        watering_frequency: joi.string(),
-        soil_type: joi.string(),
-        temperature_range: joi.string(),
-        growth_rate: joi.string(),
-    }),
+        name: joi.string().optional().trim(),
+        scientific_name: joi.string().optional().trim(),
+        description: joi.string().optional().trim(),
+        plant_type: joi.string().optional().trim(),
+        sunlight_requirement: joi.string().optional().trim(),
+        watering_frequency: joi.string().optional().trim(),
+        soil_type: joi.string().optional().trim(),
+        temperature_range: joi.string().optional().trim(),
+        growth_rate: joi.string().optional().trim(),
+    })
+        .unknown(false),
     params: joi.object().keys({
         id: joi.number().integer().required(),
-    })
+    }),
 }
 const deletePlantSchema = {
     params: joi.object().keys({

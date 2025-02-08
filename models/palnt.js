@@ -47,19 +47,22 @@ export default (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            user_id:{
+            user_id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+            },
+            is_deleted: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false,
             }
         },
         {
             sequelize,
             modelName: "Plant",
             tableName: "plants",
-            timestamps: false,
-            // createdAt: "created_at",
-            // updatedAt: "updated_at",
-            
+            freezeTableName: true,
+            timestamps: true,
+
         }
     );
     return Plant;
