@@ -1,8 +1,7 @@
-import express, { Router } from "express";
+import express from "express";
 import auth_routes from "./auth_routes.js";
 import plant_routes from "./plant_routes.js";
-import chatRoutes from "./chatRoutes.js";
-
+import chatRoutes from "./chatRoutes.js"
 const routes = express.Router();
 
 routes.use(auth_routes);
